@@ -3,6 +3,7 @@ Various implementations of metrics used in ML/DL field.
 
 ### features provided
 - rouge-n score
+- rouge-lcs score
 ### features to be added
 - [ ] text normalization
 - [ ] BLEU score

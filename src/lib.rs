@@ -104,7 +104,7 @@ pub fn create_ngrams(tokens: Vec<&str>, n: usize) -> HashMap<Vec<&str>, u32> {
 /// ### Examples
 ///
 /// ```
-/// use std::collections::{HashMap, hash_map};
+/// use std::collections::{HashMap, hashmap};
 /// use metrics_rs::{ngram_based_score, Score}; // Replace with the actual module name
 ///
 /// let predicted_ngrams = hashmap! { vec!["this", "is"] => 2, vec!["is", "an"] => 1 };
@@ -197,6 +197,23 @@ pub fn rouge(input:&str, reference: &str, n:usize) -> Result<Score, String>{
     return Ok(ngram_based_score(input_ngrams, reference_ngrams));
 }
 
+
+pub fn rouge_lcs_sentence(input: &str, reference: &str) -> Result<Score, String>{
+    let input_words = input.split_whitespace().collect();
+    let reference_words = reference.split_whitespace().collect();
+
+    let lcs_table = get_lcs_table(reference_words, input_words);
+    let lcs_length=lcs_table.last().unwrap();
+    let p = lcs_length / input_words.len();
+    let r = lcs_length / reference_words.len();
+    let f= f1(p, r);
+
+    return Ok( Score{precision:p, recall:r, f1:f})
+}
+
+pub fn get_lcs_table(reference:Vec<&str>, predicted:Vec<&str>) -> Vec<u8>{
+
+}
 
 #[cfg(test)]
 mod test_metrics  {
